@@ -10,9 +10,9 @@
     <PackageTargetFallback>$(PackageTargetFallback);portable-net45+win8+wp8+wpa81;</PackageTargetFallback>
   </PropertyGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <Content Include="wwwroot\images\logo.png" />
-  </ItemGroup>
+  </ItemGroup>-->
   
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore" Version="1.1.2" />
@@ -21,7 +21,7 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="1.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.ViewCompilation" Version="1.1.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.4.337" />
-    <PackageReference Include="NEST" Version="5.5.0" />
+    <PackageReference Include="NEST" Version="5.6.0" />
   </ItemGroup>
   <ItemGroup>
     <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="1.0.1" />

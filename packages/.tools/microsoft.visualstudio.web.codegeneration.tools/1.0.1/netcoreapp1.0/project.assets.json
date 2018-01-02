@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "targets": {
     ".NETCoreApp,Version=v1.0": {
       "Libuv/1.9.1": {
@@ -7990,21 +7990,39 @@
     ]
   },
   "packageFolders": {
-    "C:\\source\\elasticsearch-net-example\\packages": {}
+    "C:\\Dev\\OPENSOURCE\\elasticsearch-net-example-jon\\packages": {}
   },
   "project": {
     "restore": {
-      "projectUniqueName": "Microsoft.VisualStudio.Web.CodeGeneration.Tools-e08a7af8-9546-49b9-88b5-0a868e4b5823",
-      "projectName": "Microsoft.VisualStudio.Web.CodeGeneration.Tools-e08a7af8-9546-49b9-88b5-0a868e4b5823",
-      "projectPath": "C:\\source\\elasticsearch-net-example\\src\\NuSearch.Web\\NuSearch.Web.csproj",
-      "projectStyle": "DotnetCliTool"
+      "projectUniqueName": "microsoft.visualstudio.web.codegeneration.tools-netcoreapp1.0-[1.0.1, )",
+      "projectName": "microsoft.visualstudio.web.codegeneration.tools-netcoreapp1.0-[1.0.1, )",
+      "projectPath": "C:\\Dev\\OPENSOURCE\\elasticsearch-net-example-jon\\src\\NuSearch.Web\\NuSearch.Web.csproj",
+      "packagesPath": "C:\\Dev\\OPENSOURCE\\elasticsearch-net-example-jon\\packages",
+      "projectStyle": "DotnetCliTool",
+      "configFilePaths": [
+        "C:\\Dev\\OPENSOURCE\\elasticsearch-net-example-jon\\NuGet.Config",
+        "C:\\Users\\Jon\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "netcoreapp1.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "netcoreapp1.0": {
+          "projectReferences": {}
+        }
+      }
     },
     "frameworks": {
       "netcoreapp1.0": {
         "dependencies": {
           "Microsoft.VisualStudio.Web.CodeGeneration.Tools": {
             "target": "Package",
-            "version": "1.0.1"
+            "version": "[1.0.1, )"
           }
         }
       }
