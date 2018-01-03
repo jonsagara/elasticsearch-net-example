@@ -17,7 +17,6 @@ namespace NuSearch.Web.Controllers
         public IActionResult Index(SearchForm form)
         {
 			var result = _client.Search<Package>(s => s
-				.Size(25)
 				.Query(q => q
 					// Here we use the logical || operator to create a bool query to match either on id.keyword and if it 
 					//   does, give it a large boost, or otherwise match with our function_score query.
@@ -48,13 +47,38 @@ namespace NuSearch.Web.Controllers
 						)
 					)
 				)
+				.From((form.Page - 1) * form.PageSize)
+				.Size(form.PageSize)
+				.Sort(sort =>
+				{
+					// If the sort order is downloads, we do a descending sort on our downloadcount field.
+					if (form.Sort == SearchSort.Downloads)
+					{
+						return sort.Descending(p => p.DownloadCount);
+					}
+
+					// If the sort order is most recently updated we need to do a descending nested sort on p.Versions.First().LastUpdated 
+					//   because we mapped Versions as a nested object array in the previous module.
+					if (form.Sort == SearchSort.Recent)
+					{
+						return sort.Field(sortField => sortField
+							.NestedPath(p => p.Versions)
+							.Field(p => p.Versions.First().LastUpdated)
+							.Descending()
+						);
+					}
+
+					// Otherwise we sort descending by "_score", which is the default behaviour. Returning null here is also an option.
+					return sort.Descending(SortSpecialField.Score);
+				})
 			);
 
 			var model = new SearchViewModel
 			{
 				Hits = result.Hits,
 				Total = result.Total,
-				Form = form
+				Form = form,
+				TotalPages = (int)Math.Ceiling(result.Total / (double)form.PageSize)
 			};
 
 	        return View(model);
