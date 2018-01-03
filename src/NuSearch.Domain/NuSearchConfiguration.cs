@@ -14,7 +14,12 @@ namespace NuSearch.Domain
 
 		static NuSearchConfiguration()
 		{
-			_connectionSettings = new ConnectionSettings(CreateUri(9200));
+			_connectionSettings = new ConnectionSettings(CreateUri(9200))
+				.DefaultIndex("nusearch")
+				.InferMappingFor<Package>(i => i
+					.TypeName("package")
+					.IndexName("nusearch")
+				);
 		}
 
 		private static readonly ConnectionSettings _connectionSettings;
@@ -25,9 +30,9 @@ namespace NuSearch.Domain
 
 		public static Uri CreateUri(int port)
 		{
-			var host = Process.GetProcessesByName("fiddler").Any() 
+			var host = Process.GetProcessesByName("fiddler").Any()
 				? "ipv4.fiddler"
-				: "localhost";
+				: "192.168.155.183"; //"localhost";
 
 			return new Uri($"http://{host}:{port}");
 		}
@@ -35,6 +40,6 @@ namespace NuSearch.Domain
 		public static string CreateIndexName() => $"{LiveIndexAlias}-{DateTime.UtcNow:dd-MM-yyyy-HH-mm-ss}";
 
 		public static string PackagePath => 
-			RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\nuget-data" : "/nuget-data";
+			RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? @"C:\Dev\OPENSOURCE\elasticsearch-net-example-jon\nuget-data-jul-2017\nuget-data" : "/nuget-data";
 	}
 }
