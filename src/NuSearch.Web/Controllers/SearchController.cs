@@ -17,7 +17,7 @@ namespace NuSearch.Web.Controllers
         public IActionResult Index(SearchForm form)
         {
 			var result = _client.Search<Package>(s => s
-				.Query(q => q
+				.Query(q => (q
 					// Here we use the logical || operator to create a bool query to match either on id.keyword and if it 
 					//   does, give it a large boost, or otherwise match with our function_score query.
 					.Match(m => m
@@ -45,6 +45,14 @@ namespace NuSearch.Web.Controllers
 								.Query(form.Query)
 							)
 						)
+					))
+					// The + before q.Nested automatically wraps the query in a bool query filter clause, so as not to 
+					//   calculate a score for the query
+					&& +q.Nested(n => n
+						.Path(p => p.Authors)
+						.Query(nq => +nq
+							.Term(p => p.Authors.First().Name.Suffix("raw"), form.Author)
+						)
 					)
 				)
 				.From((form.Page - 1) * form.PageSize)
@@ -71,14 +79,31 @@ namespace NuSearch.Web.Controllers
 					// Otherwise we sort descending by "_score", which is the default behaviour. Returning null here is also an option.
 					return sort.Descending(SortSpecialField.Score);
 				})
+				.Aggregations(a => a
+					.Nested("authors", n => n
+						.Path(p => p.Authors)
+						.Aggregations(aa => aa
+							.Terms("author-names", ts => ts
+								.Field(p => p.Authors.First().Name.Suffix("raw"))
+							)
+						)
+					)
+				)
 			);
+
+			var authors = result.Aggs
+				.Nested("authors")
+				.Terms("author-names")
+				.Buckets
+				.ToDictionary(k => k.Key, v => v.DocCount);
 
 			var model = new SearchViewModel
 			{
 				Hits = result.Hits,
 				Total = result.Total,
 				Form = form,
-				TotalPages = (int)Math.Ceiling(result.Total / (double)form.PageSize)
+				TotalPages = (int)Math.Ceiling(result.Total / (double)form.PageSize),
+				Authors = authors
 			};
 
 	        return View(model);
