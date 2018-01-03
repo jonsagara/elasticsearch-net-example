@@ -19,6 +19,13 @@ namespace NuSearch.Web.Controllers
 			var result = _client.Search<Package>(s => s
 				.Size(25)
 				.Query(q => q
+					// Here we use the logical || operator to create a bool query to match either on id.keyword and if it 
+					//   does, give it a large boost, or otherwise match with our function_score query.
+					.Match(m => m
+						.Field(p => p.Id.Suffix("keyword"))
+						.Boost(1000)
+						.Query(form.Query)
+					) || q
 					.FunctionScore(fs => fs
 						// Use download count to boost a document's score, but cap this boost at 50 so that packages with
 						//   a download count over 500k don't differentiate on downloadCount.
@@ -32,8 +39,6 @@ namespace NuSearch.Web.Controllers
 						.Query(query => query
 							.MultiMatch(m => m
 								.Fields(f => f
-									// For searching on "id.keywrod", which we defined in the index (i.e., id has multi-field mapping).
-									.Field(p => p.Id.Suffix("keyword"), 1.5)
 									.Field(p => p.Id, 1.5)
 									.Field(p => p.Summary, 0.8)
 								)
