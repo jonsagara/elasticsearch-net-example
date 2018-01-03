@@ -27,6 +27,11 @@ namespace NuSearch.Domain.Model
 			this.Authors = latestVersion.Authors.Split('|').Select(author => new PackageAuthor { Name = author }).ToList();
 			this.Versions = feeds.Select(f => new PackageVersion(f)).ToList();
 			this.AllVersionsUnlisted = feeds.All(f => f.Published < SpecialUnlistedDate);
+			this.Suggest = new CompletionField
+			{
+				Input = new List<string>(latestVersion.Id.Split('.')) { latestVersion.Id },
+				Weight = latestVersion.DownloadCount
+			};
 		}
 		public bool AllVersionsUnlisted { get; set;  }
 
@@ -38,5 +43,6 @@ namespace NuSearch.Domain.Model
 		public List<PackageAuthor> Authors { get; set;  }
 		public List<PackageVersion> Versions { get; set; }
 		public int DownloadCount { get; set;  }
+		public CompletionField Suggest { get; set; }
 	}
 }

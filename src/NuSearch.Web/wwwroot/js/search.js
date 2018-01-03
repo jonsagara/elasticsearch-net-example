@@ -4,7 +4,7 @@
   $("input[type='checkbox']").change(function() { $("form#search-criteria").submit(); });
   $(".timeago").timeago();
 
-  //setupTypeAhead();
+  setupTypeAhead();
 
   function setupTypeAhead() {
     var typeAheadOptions = {

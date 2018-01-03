@@ -135,6 +135,9 @@ namespace NuSearch.Indexer
 									.Keyword(p => p.Name("raw"))
 								)
 							)
+							.Completion(c => c
+								.Name(p => p.Suggest)
+							)
 							.Nested<PackageVersion>(n => n
 								.Name(p => p.Versions.First())
 								.AutoMap()
